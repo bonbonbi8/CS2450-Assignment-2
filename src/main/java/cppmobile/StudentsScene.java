@@ -79,8 +79,8 @@ public class StudentsScene {
         header.setPadding(new Insets(15, 20, 15, 20));
         header.setStyle("-fx-background-color: white; -fx-border-color: #E0E0E0; -fx-border-width: 0 0 1 0;");
         
-        // Back button
-        Button backButton = new Button("< Back");
+        // Back button with Unicode arrow
+        Button backButton = new Button("\u2190 Back");
         backButton.setStyle(
             "-fx-background-color: #F0F0F0; " +
             "-fx-text-fill: #333333; " +
@@ -131,24 +131,26 @@ public class StudentsScene {
         section.setStyle(
             "-fx-background-color: #EAEAEA; " +
             "-fx-background-radius: 12; " +
-            "-fx-border-radius: 12;"
+            "-fx-border-radius: 12; " +
+            "-fx-border-color: #43A047; " +
+            "-fx-border-width: 0 0 0 4;"
         );
         
-        // Section title
+        // Section title with green accent
         Label sectionTitle = new Label(title);
         sectionTitle.setFont(Font.font("System", FontWeight.BOLD, 16));
-        sectionTitle.setStyle("-fx-text-fill: #333333;");
+        sectionTitle.setStyle("-fx-text-fill: #43A047;");
         
         // 2x2 grid of tiles
         GridPane tileGrid = new GridPane();
         tileGrid.setHgap(15);
         tileGrid.setVgap(15);
         
-        // Create tiles
-        Button tile1Btn = createTile(tile1, "[B]");
-        Button tile2Btn = createTile(tile2, "[M]");
-        Button tile3Btn = createTile(tile3, "[D]");
-        Button tile4Btn = createTile(tile4, "[E]");
+        // Create tiles with contextually appropriate emojis
+        Button tile1Btn = createTile(tile1, getEmojiForTile(tile1));
+        Button tile2Btn = createTile(tile2, getEmojiForTile(tile2));
+        Button tile3Btn = createTile(tile3, getEmojiForTile(tile3));
+        Button tile4Btn = createTile(tile4, getEmojiForTile(tile4));
         
         // Add tiles to grid
         tileGrid.add(tile1Btn, 0, 0);
@@ -158,6 +160,38 @@ public class StudentsScene {
         
         section.getChildren().addAll(sectionTitle, tileGrid);
         return section;
+    }
+    
+    private String getEmojiForTile(String tileName) {
+        // Return unique, contextually appropriate emojis for each tile
+        switch (tileName.toLowerCase()) {
+            case "my classes":
+                return "\uD83D\uDCDA"; // 📚 Books
+            case "map":
+                return "\uD83D\uDDFA"; // 🗺️ Map
+            case "dining":
+                return "\uD83C\uDF7D"; // 🍽️ Dining
+            case "email":
+                return "\u2709"; // ✉️ Email
+            case "grades":
+                return "\uD83D\uDCC8"; // 📈 Chart/Grades
+            case "schedule":
+                return "\uD83D\uDDD3"; // 🕓 Clock/Schedule
+            case "library":
+                return "\uD83D\uDCD6"; // 📖 Open Book
+            case "advising":
+                return "\uD83E\uDDD1\u200D\uD83C\uDF93"; // 👨‍🎓 Graduation Cap
+            case "events":
+                return "\uD83C\uDF89"; // 🎉 Party/Events
+            case "parking":
+                return "\uD83D\uDE97"; // 🚗 Car/Parking
+            case "health":
+                return "\uD83D\uDC96"; // 💖 Heart/Health
+            case "shuttle":
+                return "\uD83D\uDE8C"; // 🚌 Bus/Shuttle
+            default:
+                return "\uD83D\uDCDA"; // 📚 Default to books
+        }
     }
     
     private Button createTile(String label, String emoji) {
@@ -180,7 +214,16 @@ public class StudentsScene {
         tileContent.setAlignment(Pos.CENTER_LEFT);
         
         Label emojiLabel = new Label(emoji);
-        emojiLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+        // Try multiple fonts for better emoji support
+        try {
+            emojiLabel.setFont(Font.font("Segoe UI Emoji", FontWeight.BOLD, 18));
+        } catch (Exception e) {
+            try {
+                emojiLabel.setFont(Font.font("Arial Unicode MS", FontWeight.BOLD, 18));
+            } catch (Exception e2) {
+                emojiLabel.setFont(Font.font("System", FontWeight.BOLD, 18));
+            }
+        }
         
         Label textLabel = new Label(label);
         textLabel.setFont(Font.font("System", 14));
@@ -189,17 +232,18 @@ public class StudentsScene {
         tileContent.getChildren().addAll(emojiLabel, textLabel);
         tile.setGraphic(tileContent);
         
-        // Hover effect
+        // Enhanced hover effect with subtle green tint
         tile.setOnMouseEntered(e -> {
             tile.setStyle(
-                "-fx-background-color: #F8F8F8; " +
-                "-fx-border-color: #B0B0B0; " +
-                "-fx-border-width: 1; " +
+                "-fx-background-color: #F0F8F0; " +
+                "-fx-border-color: #43A047; " +
+                "-fx-border-width: 2; " +
                 "-fx-background-radius: 12; " +
                 "-fx-border-radius: 12; " +
                 "-fx-padding: 12 16; " +
                 "-fx-alignment: center-left; " +
-                "-fx-cursor: hand;"
+                "-fx-cursor: hand; " +
+                "-fx-effect: dropshadow(gaussian, rgba(67,160,71,0.3), 8, 0, 0, 2);"
             );
         });
         
@@ -212,7 +256,8 @@ public class StudentsScene {
                 "-fx-border-radius: 12; " +
                 "-fx-padding: 12 16; " +
                 "-fx-alignment: center-left; " +
-                "-fx-cursor: hand;"
+                "-fx-cursor: hand; " +
+                "-fx-effect: null;"
             );
         });
         
@@ -223,7 +268,7 @@ public class StudentsScene {
     }
     
     private void handleTileClick(String tileName) {
-        showLoadingOverlay("Opening " + tileName + "...");
+        showLoadingOverlay("Loading " + tileName + "...");
         
         // Simulate loading with async operation
         CompletableFuture.runAsync(() -> {
@@ -235,7 +280,7 @@ public class StudentsScene {
             
             Platform.runLater(() -> {
                 hideLoadingOverlay();
-                updateStatus("Opening " + tileName + "... done.");
+                updateStatus(tileName + " opened successfully.");
                 
                 // Reset status after 2 seconds
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -248,21 +293,23 @@ public class StudentsScene {
     private void showLoadingOverlay(String message) {
         updateStatus(message);
         
-        // Create loading indicator
+        // Create enhanced loading indicator
         VBox loadingBox = new VBox(15);
         loadingBox.setAlignment(Pos.CENTER);
         loadingBox.setStyle(
             "-fx-background-color: white; " +
             "-fx-background-radius: 12; " +
-            "-fx-padding: 30;"
+            "-fx-padding: 30; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 4);"
         );
         
         ProgressIndicator spinner = new ProgressIndicator();
         spinner.setPrefSize(40, 40);
+        spinner.setStyle("-fx-progress-color: #43A047;");
         
         Label loadingLabel = new Label("Loading...");
         loadingLabel.setFont(Font.font("System", 14));
-        loadingLabel.setStyle("-fx-text-fill: #333333;");
+        loadingLabel.setStyle("-fx-text-fill: #43A047;");
         
         loadingBox.getChildren().addAll(spinner, loadingLabel);
         

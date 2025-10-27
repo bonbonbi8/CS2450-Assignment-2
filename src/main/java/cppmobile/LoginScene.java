@@ -23,7 +23,11 @@ public class LoginScene {
         VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(40));
-        root.setStyle("-fx-background-color: #F5F5F5;");
+        root.setStyle(
+            "-fx-background-color: #F5F5F5; " +
+            "-fx-background-radius: 12; " +
+            "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);"
+        );
         
         // Title
         Label titleLabel = new Label("CPP Mobile Login");
@@ -53,12 +57,13 @@ public class LoginScene {
         loginButton.setPrefWidth(250);
         loginButton.setPrefHeight(45);
         loginButton.setStyle(
-            "-fx-background-color: #4CAF50; " +
+            "-fx-background-color: #43A047; " +
             "-fx-text-fill: white; " +
             "-fx-font-size: 16; " +
             "-fx-font-weight: bold; " +
             "-fx-background-radius: 8; " +
-            "-fx-border-radius: 8;"
+            "-fx-border-radius: 8; " +
+            "-fx-cursor: hand;"
         );
         
         // Set up login action

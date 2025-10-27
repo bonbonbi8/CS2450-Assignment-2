@@ -1,8 +1,10 @@
 package cppmobile;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * CPP Mobile Application - Students Screen
@@ -47,12 +49,24 @@ public class CPPMobileApp extends Application {
         primaryStage.setScene(loginScene);
         primaryStage.setWidth(380);
         primaryStage.setHeight(780);
+        
+        // Add fade transition
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), loginScene.getRoot());
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.play();
     }
     
     private void showStudentsScene() {
         primaryStage.setScene(studentsScene);
         primaryStage.setWidth(380);
         primaryStage.setHeight(780);
+        
+        // Add fade transition
+        FadeTransition fadeIn = new FadeTransition(Duration.millis(400), studentsScene.getRoot());
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        fadeIn.play();
     }
     
     public static void main(String[] args) {
