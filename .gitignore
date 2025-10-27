@@ -1,0 +1,16 @@
+# Gradle build files
+build/
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# JavaFX cache
+.gradle/
